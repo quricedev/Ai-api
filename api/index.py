@@ -6,16 +6,16 @@ import telebot
 from requests.adapters import HTTPAdapter
 
 API_URL = os.getenv("API_URL")
-AI_API_KEY = os.getenv("AI_API_KEY")
-
 MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME = os.getenv("DB_NAME", "neonosint")
 BOT_TOKEN = os.getenv("TELEGRAM_TOKEN")
 ADMIN_ID = int(os.getenv("ADMIN_ID", "0"))
-BASE_URL = os.getenv("BASE_URL")
 
 KEYS_COLL_NAME = "AI_APIKEY"
 UPSTREAM_TIMEOUT = float(os.getenv("UPSTREAM_TIMEOUT", "6"))
+CACHE_TTL = int(os.getenv("UPSTREAM_CACHE_TTL", "60"))
+
+BASE_URL="https://usesir-ai.vercel.app"
 
 AI_PROMPT = (
     "You are Alice 🤖, an AI assistant created by @UseSir / @OverShade. "
@@ -26,6 +26,9 @@ AI_PROMPT = (
 )
 
 app = Flask(__name__)
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("aiapi")
 
 client = MongoClient(MONGO_URI)
 db = client[DB_NAME]
