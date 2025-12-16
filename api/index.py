@@ -241,8 +241,9 @@ def chat_handler(m):
 
 @app.route("/telegram", methods=["POST"])
 def telegram_webhook():
+    if request.headers.get("content-type") != "application/json":
+        return "Unsupported", 415
     update = telebot.types.Update.de_json(request.get_data().decode("utf-8"))
     bot.process_new_updates([update])
     return "OK", 200
-
 app
